@@ -1,2 +1,5 @@
 .DS_Store
 .Rproj.user
+.Rhistory
+figures/figure3_probabilistic_polya_1000.pdf
+data/figure_3_1000.csv

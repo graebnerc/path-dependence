@@ -80,6 +80,23 @@ probabilistic_replacement <- function(balls) {
   return(balls)
 }
 
+#' Alternative Non-linear Replacement Rule: 
+#'  Uses 3x^2 - 2x^3 transformation
+#' Creates different dominance pattern than simple squaring, used by Arthur
+arthur_nonlinear_replacement <- function(balls) {
+  total <- sum(balls)
+  shares <- balls / total
+  
+  # Apply non-linear transformation: 3x^2 - 2x^3
+  # This function is S-shaped and amplifies intermediate differences
+  transformed <- 3 * shares^2 - 2 * shares^3
+  probs <- transformed / sum(transformed)
+  
+  drawn_color <- sample(length(balls), 1, prob = probs)
+  balls[drawn_color] <- balls[drawn_color] + 1
+  return(balls)
+}
+
 #' Run multiple simulations
 #' 
 #' @param n_runs Number of simulation runs
@@ -247,14 +264,33 @@ fig3_data <- run_multiple_simulations(
   initial_balls = c(1, 1),
   replacement_rule = probabilistic_replacement
 )
-write_csv(x = fig3_data, file = here("data/figure_3.csv"))
+write_csv(x = fig3_data, file = here("data/figure_3_1000.csv"))
 
 fig3_plot <- create_figure(
   fig3_data, n_display = 16, title_prefix = "Polya Urn (prob. replacement)")
 
 # Save Figure 3
-ggsave(here("figures/figure3_probabilistic_polya.pdf"), 
+ggsave(here("figures/figure3_probabilistic_polya_1000.pdf"), 
        fig3_plot, width = 12, height = 5)
 message("Figure 3 saved as 'figure3_probabilistic_polya.pdf'")
+
+# Figure 3: Probabilistic Replacement Rule (strong dominance)
+message("\nSimulating Figure 4: Arthurs probabilistic Replacement Rule...")
+fig4_data <- run_multiple_simulations(
+  n_runs = 500,
+  n_rounds = 200,
+  initial_balls = c(1, 1),
+  replacement_rule = arthur_nonlinear_replacement
+)
+write_csv(x = fig4_data, file = here("data/figure_4.csv"))
+
+fig4_plot <- create_figure(
+  fig4_data, n_display = 16, 
+  title_prefix = "Polya Urn (pr. replacement II)")
+
+# Save Figure 4
+ggsave(here("figures/figure4_probabilistic_polya.pdf"), 
+       fig4_plot, width = 12, height = 5)
+message("Figure 4 saved as 'figure3_probabilistic_polya.pdf'")
 
 message("\n=== Simulation Complete ===")

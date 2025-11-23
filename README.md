@@ -2,13 +2,12 @@
 
 ## Introduction
 
-This code recreates the three figures of Gräbner-Radkowitsch & Kapeller ([forthcoming](https://www.uni-due.de/imperia/md/content/soziooekonomie/ifsowp36_graebner-radkowitschkapeller_2024.pdf)).
+This code recreates the figures of Gräbner-Radkowitsch & Kapeller ([forthcoming](https://www.uni-due.de/imperia/md/content/soziooekonomie/ifsowp36_graebner-radkowitschkapeller_2024.pdf)).
 
-To run all simulations simple run the script `polya_urn_simulations.R`.
+To run all simulations simply run the script `polya_urn_simulations.R`.
+This will run the cases as described in the main paper and creates the figures in the subdirectory `figures`.
 
-This will run the three cases as described in the main paper and creates the three figures in the subdirectory `figures`.
-
-## Description of the three cases
+## Description of the cases
 
 All three cases follow the general structure of a Polya urn process, starting with an urn containing one ball of each color (orange and purple). In each round $t$, one ball is drawn randomly, returned to the urn, and additional balls are added according to the specific replacement rule. The key difference between the three cases lies in the replacement mechanism, which determines the strength of positive feedback and the degree of path dependence.
 
@@ -17,7 +16,6 @@ All three cases follow the general structure of a Polya urn process, starting wi
 **Implementation:** `standard_replacement()`
 
 **Mechanism:** 
-
 - Draw one ball with probability proportional to current counts
 - Add 1 ball of the same color back to the urn
 
@@ -35,7 +33,6 @@ n_i(t) & \text{otherwise}
 \end{cases}$$
 
 **Properties:**
-
 - Exhibits **weak dominance**: the share of each color converges to a stable value determined by early random events
 - The expected share of color $i$ equals its initial share: $\mathbb{E}[\text{share}_i(\infty)] = \text{share}_i(0)$
 - Final shares follow an approximately uniform distribution across runs
@@ -47,7 +44,6 @@ n_i(t) & \text{otherwise}
 **Implementation:** `higher_growth_replacement()`
 
 **Mechanism:**
-
 - Draw one ball with probability proportional to current counts
 - Add 3 balls of the same color back to the urn
 
@@ -63,7 +59,6 @@ n_i(t) & \text{otherwise}
 \end{cases}$$
 
 **Properties:**
-
 - Exhibits **stronger dominance** than the standard case
 - Faster divergence from balanced shares
 - Earlier lock-in to stable configurations
@@ -76,7 +71,6 @@ n_i(t) & \text{otherwise}
 **Implementation:** `probabilistic_replacement()`
 
 **Mechanism:**
-
 - Apply non-linear transformation to favor the currently dominant color
 - Draw one ball with **over-proportional** probability for larger shares
 - Add 1 ball of the drawn color back to the urn
@@ -95,7 +89,6 @@ n_i(t) & \text{otherwise}
 \end{cases}$$
 
 **Properties:**
-
 - Exhibits **strong dominance**: most runs converge to near-complete dominance (>95%) of one color
 - The squaring of shares amplifies differences, creating a "winner-takes-all" dynamic
 - Trajectories diverge rapidly in early rounds
@@ -103,21 +96,53 @@ n_i(t) & \text{otherwise}
 - Mean final share of dominant color: >90%
 - Demonstrates how non-linear positive feedback mechanisms can lead to extreme outcomes
 
+### Case 4: Alternative Non-linear Replacement Rule (Figure 4)
+
+**Implementation:** `arthur_nonlinear_replacement()`
+
+**Mechanism:**
+- Apply S-shaped non-linear transformation using $3x^2 - 2x^3$
+- Draw one ball with over-proportional probability based on this transformation
+- Add 1 ball of the drawn color back to the urn
+
+**Mathematical formulation:**
+
+Let $s_i(t) = \frac{n_i(t)}{N(t)}$ denote the share of color $i$ at time $t$.
+
+The probability of drawing color $i$ uses an alternative non-linear transformation:
+$$P(\text{draw color } i \mid t) = \frac{3s_i(t)^2 - 2s_i(t)^3}{\sum_j (3s_j(t)^2 - 2s_j(t)^3)}$$
+
+The update rule is:
+$$n_i(t+1) = \begin{cases} 
+n_i(t) + 1 & \text{if color } i \text{ is drawn} \\
+n_i(t) & \text{otherwise}
+\end{cases}$$
+
+**Properties:**
+- The transformation function $f(x) = 3x^2 - 2x^3$ is S-shaped (sigmoid-like)
+- Provides moderate amplification for intermediate shares (around 0.3-0.7)
+- Stronger amplification once a color gains significant advantage
+- More gradual path formation phase compared to Case 3
+- The function is symmetric around $x = 0.5$: $f(0.5) = 0.5$
+- Boundary conditions: $f(0) = 0$ and $f(1) = 1$
+- Demonstrates how different non-linear feedback functions create distinct lock-in dynamics
+
 ### Comparison of mechanisms
 
 | Case | Balls Added | Probability Rule | Dominance Type | Mean Final Share |
 |------|-------------|------------------|----------------|------------------|
 | 1. Standard | 1 | Linear (proportional) | Weak | ~75% |
 | 2. Higher Growth | 3 | Linear (proportional) | Moderate | ~85% |
-| 3. Probabilistic | 1 | Non-linear (squared) | Strong | >90% |
+| 3. Probabilistic | 1 | Non-linear ($x^2$) | Strong | >90% |
+| 4. Alternative Non-linear | 1 | Non-linear ($3x^2 - 2x^3$) | Strong | ~85-90% |
 
-The three cases illustrate how different specifications of positive feedback mechanisms affect the degree of path dependence:
-
+The four cases illustrate how different specifications of positive feedback mechanisms affect the degree of path dependence:
 - **Case 1** shows that even minimal positive feedback (adding one ball) creates path dependence through cumulative causation
 - **Case 2** demonstrates that increasing the magnitude of feedback accelerates lock-in
-- **Case 3** shows that non-linear feedback mechanisms can create winner-takes-all dynamics even with minimal additions per round
+- **Case 3** shows that non-linear feedback mechanisms (simple squaring) can create winner-takes-all dynamics even with minimal additions per round
+- **Case 4** illustrates how the shape of the non-linear transformation affects the dynamics: an S-shaped function provides more balanced competition in early rounds but strong lock-in once advantages emerge
 
-All three cases share the fundamental characteristic of path dependence: early random events become amplified through positive feedback, leading to stable configurations that are difficult to reverse.
+All four cases share the fundamental characteristic of path dependence: early random events become amplified through positive feedback, leading to stable configurations that are difficult to reverse.
 
 ## Citation
 
@@ -125,7 +150,7 @@ These simulations recreate figures from:
 
 Gräbner-Radkowitsch, C., & Kapeller, J. (forthcoming). 
 Path Dependence. In W. Waller & W. Elsner (Eds.), 
-*Elgar Encyclopedia of Institutional and Evolutionary Economics. *
+*Elgar Encyclopedia of Institutional and Evolutionary Economics.*
 Edward Elgar Publishing.
 
 - [Working Paper Version](https://www.uni-due.de/imperia/md/content/soziooekonomie/ifsowp36_graebner-radkowitschkapeller_2024.pdf)
