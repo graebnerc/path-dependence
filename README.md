@@ -96,7 +96,7 @@ n_i(t) & \text{otherwise}
 - Mean final share of dominant color: >90%
 - Demonstrates how non-linear positive feedback mechanisms can lead to extreme outcomes
 
-### Case 4: Alternative Non-linear Replacement Rule (not in main paper)
+### Case 4: Alternative Non-linear Replacement Rule (Figure 4)
 
 **Implementation:** `arthur_nonlinear_replacement()`
 
@@ -119,13 +119,14 @@ n_i(t) & \text{otherwise}
 \end{cases}$$
 
 **Properties:**
-- The transformation function $f(x) = 3x^2 - 2x^3$ is S-shaped (sigmoid-like)
-- Provides moderate amplification for intermediate shares (around 0.3-0.7)
-- Stronger amplification once a color gains significant advantage
-- More gradual path formation phase compared to Case 3
+- The transformation function $f(x) = 3x^2 - 2x^3$ is S-shaped with inflection point at $x = 0.5$
+- The derivative $f'(x) = 6x - 6x^2$ peaks at $x = 0.5$, meaning amplification is strongest for balanced shares
+- Provides more moderate amplification for small shares (below 0.5) compared to Case 3
+- Provides stronger amplification for intermediate shares (around 0.5-0.8) compared to Case 3
+- Creates more competitive dynamics in the middle phase before lock-in occurs
 - The function is symmetric around $x = 0.5$: $f(0.5) = 0.5$
 - Boundary conditions: $f(0) = 0$ and $f(1) = 1$
-- Demonstrates how different non-linear feedback functions create distinct lock-in dynamics
+- Demonstrates how the shape of non-linear transformation affects amplification patterns and lock-in dynamics
 
 ### Comparison of mechanisms
 
@@ -133,15 +134,14 @@ n_i(t) & \text{otherwise}
 |------|-------------|------------------|----------------|------------------|
 | 1. Standard | 1 | Linear (proportional) | Weak | ~75% |
 | 2. Higher Growth | 3 | Linear (proportional) | Moderate | ~85% |
-| 3. Probabilistic | 1 | Non-linear ($x^2$) | Strong | >95% |
+| 3. Probabilistic | 1 | Non-linear ($x^2$) | Strong | >90% |
 | 4. Alternative Non-linear | 1 | Non-linear ($3x^2 - 2x^3$) | Strong | ~85-90% |
 
 The four cases illustrate how different specifications of positive feedback mechanisms affect the degree of path dependence:
-
 - **Case 1** shows that even minimal positive feedback (adding one ball) creates path dependence through cumulative causation
 - **Case 2** demonstrates that increasing the magnitude of feedback accelerates lock-in
 - **Case 3** shows that non-linear feedback mechanisms (simple squaring) can create winner-takes-all dynamics even with minimal additions per round
-- **Case 4** illustrates how the shape of the non-linear transformation affects the dynamics: an S-shaped function provides more balanced competition in early rounds but strong lock-in once advantages emerge
+- **Case 4** illustrates how the shape of the non-linear transformation affects dynamics: an S-shaped function moderates early advantages but strongly amplifies intermediate positions, creating more competitive mid-game dynamics while still enabling lock-in
 
 All four cases share the fundamental characteristic of path dependence: early random events become amplified through positive feedback, leading to stable configurations that are difficult to reverse.
 
