@@ -96,7 +96,7 @@ n_i(t) & \text{otherwise}
 - Mean final share of dominant color: >90%
 - Demonstrates how non-linear positive feedback mechanisms can lead to extreme outcomes
 
-### Case 4: Alternative Non-linear Replacement Rule (Figure 4)
+### Case 4: Alternative Non-linear Replacement Rule (not in main paper)
 
 **Implementation:** `arthur_nonlinear_replacement()`
 
@@ -133,10 +133,11 @@ n_i(t) & \text{otherwise}
 |------|-------------|------------------|----------------|------------------|
 | 1. Standard | 1 | Linear (proportional) | Weak | ~75% |
 | 2. Higher Growth | 3 | Linear (proportional) | Moderate | ~85% |
-| 3. Probabilistic | 1 | Non-linear ($x^2$) | Strong | >90% |
+| 3. Probabilistic | 1 | Non-linear ($x^2$) | Strong | >95% |
 | 4. Alternative Non-linear | 1 | Non-linear ($3x^2 - 2x^3$) | Strong | ~85-90% |
 
 The four cases illustrate how different specifications of positive feedback mechanisms affect the degree of path dependence:
+
 - **Case 1** shows that even minimal positive feedback (adding one ball) creates path dependence through cumulative causation
 - **Case 2** demonstrates that increasing the magnitude of feedback accelerates lock-in
 - **Case 3** shows that non-linear feedback mechanisms (simple squaring) can create winner-takes-all dynamics even with minimal additions per round
